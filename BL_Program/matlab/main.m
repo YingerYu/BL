@@ -9,14 +9,17 @@ file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);
 
-CDF_TCP_RX_JITTER_sum = zeros(1,10);
-CDF_TCP_TX_JITTER_sum = zeros(1,10);
-CDF_sum = zeros(1,10);
+delay_bin = 0.001 : 0.005 : 5;
+
+CDF_TCP_RX_JITTER_sum = zeros(size(length(delay_bin)));
+CDF_TCP_TX_JITTER_sum = zeros(size(length(delay_bin)));
+CDF_sum               = zeros(size(length(delay_bin)));
 OOO_DATA_calculated_total = [];
 
 for file_count = 1 : 1 : length(file_list)
     xpl_file_name = file_list{file_count};
-    pre_output = pre6(xpl_file_name);
+    pre_output = pre6(xpl_file_name, delay_bin);
+    save([file_list{file_count} '_MATLAB'], 'pre_output')
     CDF_TCP_RX_JITTER_sum = CDF_TCP_RX_JITTER_sum + pre_output{1}; 
     CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + pre_output{2}; 
     CDF_sum = CDF_sum + pre_output{3}; 
@@ -30,7 +33,7 @@ CDF_average = CDF_sum/length(file_list);
 
 % figure5 is the CDF_TCP_RX_JITTER
 figure(5);
-plot(CDF_TCP_RX_JITTER_average,'-g');
+semilogx(delay_bin, CDF_TCP_RX_JITTER_average,'-g');
 hold on;
 axis square;
 grid on;
@@ -41,7 +44,7 @@ saveas(5,'Average_CDF of TCP\_RX\_JITTER');
 
 % figure6 is the histogram
 figure(6);
-plot(CDF_TCP_TX_JITTER_average,'-b');
+semilogx(delay_bin, CDF_TCP_TX_JITTER_average,'-b');
 hold on;
 axis square;
 grid on;
@@ -53,7 +56,7 @@ saveas(6,'Average_CDF of TCP\_TX\_JITTER');
 
 % figure7 is the histogram
 figure(7);
-plot(CDF_average,'-m');
+semilogx(delay_bin, CDF_average,'-m');
 hold on;
 axis square;
 grid on;
@@ -69,7 +72,7 @@ y = OOO_DATA_calculated_total(:,2);
 plot(x,y,'or');
 hold on;
 axis square;
-% axis([0 15 0 4]);
+axis([0 5 0 2]);
 grid on;
 xlabel('Out\_of\_order dalay (seconds)');
 ylabel('Out\_of\_order block numbers (1388bytes per block)');

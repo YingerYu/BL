@@ -6,7 +6,7 @@
 %%%---------------------------------------------------------------------------------------------%%%
 
 
-function pre_output = pre6(xpl_file_name)
+function pre_output = pre6(xpl_file_name, bins)
 % close all
 % clear all
 % clc
@@ -94,10 +94,16 @@ disp('...all unusual data has been founded')
 disp('Ploting the figure...')
 % % Plot figure5 for the tcptrace
 % figure(5);
-% x1 = TCP_RX_data(:,1);
-% y1 = TCP_RX_data(:,2);
-% plot(x1,y1,'.b');
-% hold on;
+% clf
+% x1rx = TCP_RX_data(:,1);
+% y1rx = TCP_RX_data(:,2);
+% 
+% x1tx = TCP_TX_data(:,1);
+% y1tx = TCP_TX_data(:,2);
+% hold on
+% plot(x1rx - TCP_RX_data(1),y1rx,'.b'); 
+% plot(x1tx - TCP_TX_data(1),y1tx,'r');    % TCP TX
+% hold off
 % axis square;
 % grid on;
 % xlabel('Time (seconds)');
@@ -107,9 +113,10 @@ disp('Ploting the figure...')
 figure(1);
 % a1 = [xpl_file_name,'1'];
 % figure(a1);
-CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time);
+
+CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, bins);
 CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time));
-plot(CDF_TCP_RX_JITTER,'-g');
+semilogx(bins, CDF_TCP_RX_JITTER,'-g');
 hold on;
 axis square;
 grid on;
@@ -123,9 +130,9 @@ figure1 = [xpl_file_name,'_CDF of TCP\_RX\_JITTER.fig'];
 figure(2);
 % a2 = [xpl_file_name,'2'];
 % figure(a2);
-CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time);
+CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, bins);
 CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time));
-plot(CDF_TCP_TX_JITTER,'-b');
+semilogx(bins, CDF_TCP_TX_JITTER,'-b');
 hold on;
 axis square;
 grid on;
@@ -140,9 +147,9 @@ figure2 = [xpl_file_name,'_CDF of TCP\_TX\_JITTER.fig'];
 figure(3);
 % a3 = [xpl_file_name,'3'];
 % figure(a3);
-h = hist(OCC(:,1));
+h = hist(OCC(:,1), bins);
 CDF = cumsum(h/length(OCC));
-plot(CDF,'-m');
+semilogx(bins, CDF,'-m');
 hold on;
 axis square;
 grid on;

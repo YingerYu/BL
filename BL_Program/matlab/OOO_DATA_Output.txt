@@ -1,0 +1,70 @@
+**********************************************************************************************
+Found the unusual data from sequence# 2062650659 to sequence# 2062652047 at 1440018809.042023s 
+1 packet has been delayed for 0.631936s
+Found the unusual data from sequence# 2065856564 to sequence# 2065857952 at 1440018842.485845s 
+1 packet has been delayed for 4.627519s
+Found the unusual data from sequence# 2066477000 to sequence# 2066478388 at 1440018856.908890s 
+1 packet has been delayed for 0.000002s
+Found the unusual data from sequence# 2067795600 to sequence# 2067796988 at 1440018859.816608s 
+1 packet has been delayed for 0.001956s
+Found the unusual data from sequence# 2067799764 to sequence# 2067801152 at 1440018859.818545s 
+1 packet has been delayed for 0.000978s
+Found the unusual data from sequence# 2069458424 to sequence# 2069459812 at 1440018862.804429s 
+1 packet has been delayed for 0.004035s
+Found the unusual data from sequence# 2069465364 to sequence# 2069466752 at 1440018862.807394s 
+1 packet has been delayed for 0.000999s
+Found the unusual data from sequence# 2069476468 to sequence# 2069477856 at 1440018862.959387s 
+1 packet has been delayed for 0.001007s
+Found the unusual data from sequence# 2071167052 to sequence# 2071168440 at 1440018866.030289s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2071895752 to sequence# 2071897140 at 1440018868.264297s 
+1 packet has been delayed for 0.593062s
+Found the unusual data from sequence# 2075465688 to sequence# 2075467076 at 1440018880.406699s 
+1 packet has been delayed for 0.010910s
+Found the unusual data from sequence# 2079415936 to sequence# 2079417324 at 1440018894.154496s 
+1 packet has been delayed for 0.004273s
+Found the unusual data from sequence# 2086813976 to sequence# 2086815364 at 1440018912.163767s 
+1 packet has been delayed for 0.304849s
+Found the unusual data from sequence# 2153987624 to sequence# 2153989012 at 1440018980.486865s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2154002892 to sequence# 2154004280 at 1440018980.492472s 
+1 packet has been delayed for 0.161556s
+Found the unusual data from sequence# 2162300356 to sequence# 2162301744 at 1440018988.297328s 
+1 packet has been delayed for 0.287766s
+Found the unusual data from sequence# 2213518944 to sequence# 2213520332 at 1440019024.009240s 
+1 packet has been delayed for 0.000549s
+Found the unusual data from sequence# 2213525884 to sequence# 2213527272 at 1440019024.009243s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2216024284 to sequence# 2216025672 at 1440019025.951872s 
+1 packet has been delayed for 0.003577s
+Found the unusual data from sequence# 2216029836 to sequence# 2216031224 at 1440019025.952760s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2216040940 to sequence# 2216042328 at 1440019025.954521s 
+1 packet has been delayed for 0.000003s
+Found the unusual data from sequence# 2216047880 to sequence# 2216049268 at 1440019025.956672s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2248529856 to sequence# 2248531244 at 1440019068.455150s 
+1 packet has been delayed for 0.614865s
+Found the unusual data from sequence# 2288476496 to sequence# 2288477884 at 1440019113.111255s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288484824 to sequence# 2288486212 at 1440019113.115291s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288493152 to sequence# 2288494540 at 1440019113.125742s 
+1 packet has been delayed for 0.000003s
+Found the unusual data from sequence# 2288498704 to sequence# 2288500092 at 1440019113.125743s 
+1 packet has been delayed for 0.142395s
+Found the unusual data from sequence# 2288508420 to sequence# 2288509808 at 1440019113.126574s 
+1 packet has been delayed for 0.000824s
+Found the unusual data from sequence# 2288516748 to sequence# 2288518136 at 1440019113.126577s 
+1 packet has been delayed for 0.000002s
+Found the unusual data from sequence# 2288529240 to sequence# 2288530628 at 1440019113.126581s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288566716 to sequence# 2288568104 at 1440019113.133892s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288697188 to sequence# 2288698576 at 1440019113.180733s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288704128 to sequence# 2288705516 at 1440019113.181734s 
+1 packet has been delayed for 0.000001s
+Found the unusual data from sequence# 2288709680 to sequence# 2288711068 at 1440019113.182911s 
+1 packet has been delayed for 0.000000s
+**********************************************************************************************

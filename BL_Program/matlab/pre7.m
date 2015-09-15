@@ -5,20 +5,23 @@
 % Analyze the Tcptrace data and plot the figures.
 %%%---------------------------------------------------------------------------------------------%%%
 
-% function main()
-close all
-clear all
-clc
+
+function pre_output = pre7(xpl_file_name, bins)
+% close all
+% clear all
+% clc
 
 % Define and initialize the parameters that used in this function
 VariMax = 2; % define 2 types of data, time & sequence number
-TCP_RX_data = zeros(0,VariMax); % save all lines into a cell
+TCP_RX_data = zeros(0,VariMax); % save all lines into a matrix
 
 % Read the local file to analysis the data
-fid1 = fopen('p2o_tsg.xpl');
-% fid1 = fopen('/home/mina/Desktop2/yu/Verizon_NJ---/indoor-slow---unlimited/VRZ_dongle---DL_2x200MB---UL_nothing---MH_5thFloor-UnixRoom-CEO-DemoLab---client/l2k_tsg.xpl');
+fid1 = fopen(xpl_file_name);
+
 % Create a file to save the data
-fid2 = fopen('OOO_DATA_Output.txt', 'w', 'n', 'utf-8'); 
+output_name = [xpl_file_name,'_OOO_DATA_Output.txt'];
+save(output_name);
+fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 
 
 % Set the expr to select useful informations
 expr1 = 'darrow'; % white arrow's first line begin with "darrow"
@@ -96,10 +99,16 @@ disp('...all unusual data has been founded')
 disp('Ploting the figure...')
 % % Plot figure5 for the tcptrace
 % figure(5);
-% x1 = TCP_RX_data(:,1);
-% y1 = TCP_RX_data(:,2);
-% plot(x1,y1,'.b');
-% hold on;
+% clf
+% x1rx = TCP_RX_data(:,1);
+% y1rx = TCP_RX_data(:,2);
+% 
+% x1tx = TCP_TX_data(:,1);
+% y1tx = TCP_TX_data(:,2);
+% hold on
+% plot(x1rx - TCP_RX_data(1),y1rx,'.b'); 
+% plot(x1tx - TCP_TX_data(1),y1tx,'r');    % TCP TX
+% hold off
 % axis square;
 % grid on;
 % xlabel('Time (seconds)');
@@ -107,43 +116,43 @@ disp('Ploting the figure...')
 
 % figure1 is the CDF_TCP_RX_JITTER
 figure(1);
-CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time);
+CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, bins);
 CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time));
-plot(CDF_TCP_RX_JITTER,'-g');
+semilogx(bins, CDF_TCP_RX_JITTER,'-g');
 hold on;
 axis square;
 grid on;
 xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
 ylabel('CDF');
 title('CDF of TCP\_RX\_JITTER');
-saveas(1,'CDF of TCP\_RX\_JITTER');
+% figure1 = [xpl_file_name,'_CDF of TCP\_RX\_JITTER.fig'];
 
 % figure2 is the histogram
 figure(2);
-CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time);
+CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, bins);
 CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time));
-plot(CDF_TCP_TX_JITTER,'-b');
+semilogx(bins, CDF_TCP_TX_JITTER,'-b');
 hold on;
 axis square;
 grid on;
 xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
 ylabel('CDF');
 title('CDF of TCP\_TX\_JITTER');
-saveas(2,'CDF of TCP\_TX\_JITTER');
+% figure2 = [xpl_file_name,'_CDF of TCP\_TX\_JITTER.fig'];
 
 
 % figure3 is the histogram
 figure(3);
-h = hist(OCC(:,1));
+h = hist(OCC(:,1), bins);
 CDF = cumsum(h/length(OCC));
-plot(CDF,'-m');
+semilogx(bins, CDF,'-m');
 hold on;
 axis square;
 grid on;
 xlabel('Delay (seconds)');
 ylabel('CDF');
 title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
-saveas(3,'CDF of (TCP\_RX\_time - TCP\_TX\_time)');
+% figure3 = [xpl_file_name,'_CDF of (TCP\_RX\_time - TCP\_TX\_time).fig'];
 
 % figure4 is the Unusual numbers of packets VS dalay
 figure(4);
@@ -152,14 +161,22 @@ y = OOO_DATA_calculated(:,2);
 plot(x,y,'or');
 hold on;
 axis square;
-axis([0 10 0 3]);
+% axis([0 20 0 3]);
 grid on;
 xlabel('Out\_of\_order dalay (seconds)');
 ylabel('Out\_of\_order block numbers (1388bytes per block)');
 title('OOO block numbers VS OOO dalay');
-saveas(4,'OOO block numbers VS OOO dalay');
+% figure4 = [xpl_file_name,'_OOO block numbers VS OOO dalay.fig'];
+
 
 disp('...all the figure have been printed')
+
+% output all the matrix into a big cell
+pre_output{1,1} = CDF_TCP_RX_JITTER;
+pre_output{1,2} = CDF_TCP_TX_JITTER;
+pre_output{1,3} = CDF;
+pre_output{1,4} = OOO_DATA_calculated;
+
 disp('Program finished')
 
-% end
+end

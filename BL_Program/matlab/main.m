@@ -40,7 +40,7 @@ grid on;
 xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
 ylabel('CDF');
 title('CDF of TCP\_RX\_JITTER');
-saveas(5,'Average_CDF of TCP\_RX\_JITTER');
+saveas(5,'Average_CDF_of_TCP_RX_JITTER');
 
 % figure6 is the histogram
 figure(6);
@@ -51,7 +51,7 @@ grid on;
 xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
 ylabel('CDF');
 title('CDF of TCP\_TX\_JITTER');
-saveas(6,'Average_CDF of TCP\_TX\_JITTER');
+saveas(6,'Average_CDF_of_TCP_TX_JITTER');
 
 
 % figure7 is the histogram
@@ -63,7 +63,7 @@ grid on;
 xlabel('Delay (seconds)');
 ylabel('CDF');
 title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
-saveas(7,'Average_CDF of (TCP\_RX\_time - TCP\_TX\_time)');
+saveas(7,'Average_CDF_of_(TCP_RX_time_minus_TCP_TX_time)');
 
 % figure8 is the Unusual numbers of packets VS dalay
 figure(8);
@@ -77,7 +77,7 @@ grid on;
 xlabel('Out\_of\_order dalay (seconds)');
 ylabel('Out\_of\_order block numbers (1388bytes per block)');
 title('OOO block numbers VS OOO dalay');
-saveas(8,'Totl_OOO block numbers VS OOO dalay');
+saveas(8,'Totl_OOO_block_numbers_VS_OOO_dalay');
 
 % % figure9 is the pkt_block VS dalay bins VS HIST by using hist3
 % figure(9);
@@ -94,6 +94,6 @@ saveas(8,'Totl_OOO block numbers VS OOO dalay');
 % zlabel('Hist');
 % set(get(gca,'child'),'FaceColor','interp','CDataMode','auto');
 % title('3D figure for hist per block_size\&delay bins');
-% saveas(9,'3D figure for hist per block_size\&delay bins');
+% saveas(9,'3D_figure_for_hist_per_block_size&delay_bins');
 
 % end

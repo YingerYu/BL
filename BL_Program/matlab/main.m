@@ -31,40 +31,40 @@ CDF_TCP_RX_JITTER_average = CDF_TCP_RX_JITTER_sum/length(file_list);
 CDF_TCP_TX_JITTER_average = CDF_TCP_TX_JITTER_sum/length(file_list);
 CDF_average = CDF_sum/length(file_list);
 
-% % figure5 is the CDF_TCP_RX_JITTER
-% figure(5);
-% semilogx(delay_bin, CDF_TCP_RX_JITTER_average,'-g');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
-% ylabel('CDF');
-% title('CDF of TCP\_RX\_JITTER');
-% saveas(5,'Average_CDF of TCP\_RX\_JITTER');
-% 
-% % figure6 is the histogram
-% figure(6);
-% semilogx(delay_bin, CDF_TCP_TX_JITTER_average,'-b');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
-% ylabel('CDF');
-% title('CDF of TCP\_TX\_JITTER');
-% saveas(6,'Average_CDF of TCP\_TX\_JITTER');
-% 
-% 
-% % figure7 is the histogram
-% figure(7);
-% semilogx(delay_bin, CDF_average,'-m');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delay (seconds)');
-% ylabel('CDF');
-% title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
-% saveas(7,'Average_CDF of (TCP\_RX\_time - TCP\_TX\_time)');
-% 
+% figure5 is the CDF_TCP_RX_JITTER
+figure(5);
+semilogx(delay_bin, CDF_TCP_RX_JITTER_average,'-g');
+hold on;
+axis square;
+grid on;
+xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
+ylabel('CDF');
+title('CDF of TCP\_RX\_JITTER');
+saveas(5,'Average_CDF of TCP\_RX\_JITTER');
+
+% figure6 is the histogram
+figure(6);
+semilogx(delay_bin, CDF_TCP_TX_JITTER_average,'-b');
+hold on;
+axis square;
+grid on;
+xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
+ylabel('CDF');
+title('CDF of TCP\_TX\_JITTER');
+saveas(6,'Average_CDF of TCP\_TX\_JITTER');
+
+
+% figure7 is the histogram
+figure(7);
+semilogx(delay_bin, CDF_average,'-m');
+hold on;
+axis square;
+grid on;
+xlabel('Delay (seconds)');
+ylabel('CDF');
+title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
+saveas(7,'Average_CDF of (TCP\_RX\_time - TCP\_TX\_time)');
+
 % figure8 is the Unusual numbers of packets VS dalay
 figure(8);
 x = OOO_DATA_calculated_total(:,1);

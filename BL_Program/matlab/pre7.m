@@ -12,6 +12,8 @@ function pre_output = pre7(xpl_file_name, bins)
 % clc
 
 % Define and initialize the parameters that used in this function
+% block_size = 1388; % define the block size for seq# (LTE)
+block_size = 1390; % define the block size for seq# (small_cell)
 VariMax = 2; % define 2 types of data, time & sequence number
 TCP_RX_data = zeros(0,VariMax); % save all lines into a matrix
 
@@ -76,18 +78,18 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort)-1)
             fprintf(fid2,'Found the unusual data from sequence# %d to sequence# %d at %8fs \n',TCP_RX_data_sort(scount,2),TCP_RX_data_sort((scount+1),2),TCP_RX_data_sort(scount,1));
             delta_seq  = TCP_RX_data_sort((scount+1),2) - TCP_RX_data_sort(scount,2);
             delta_time = TCP_RX_data_sort(scount,1) - TCP_RX_data_sort((scount-1),1);
-            pkt_block  = delta_seq/1388;
+            pkt_block  = delta_seq/block_size;
             if (pkt_block >= 1 && delta_time > 0)
                 OOO_DATA_calculated(count,1) = delta_time;
                 OOO_DATA_calculated(count,2) = pkt_block;
                 count = count + 1;
             end
-            if (delta_seq/1388 > 1)
-                fprintf('%d packets have been delayed for %4fs\n',delta_seq/1388,delta_time);
-                fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/1388,delta_time);
+            if (delta_seq/block_size > 1)
+                fprintf('%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
             else
-                fprintf('%d packet has been delayed for %4fs\n',delta_seq/1388,delta_time);
-                fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/1388,delta_time);
+                fprintf('%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
             end
         end
     end

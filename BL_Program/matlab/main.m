@@ -4,7 +4,7 @@ clear all
 clc
 
 % Read the list file
-fileID = fopen('/home/mina/Desktop2/yu/full.txt');
+fileID = fopen('/home/mina/Desktop2/yu/Data/EBC/1UE---handover/list.txt');
 file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);

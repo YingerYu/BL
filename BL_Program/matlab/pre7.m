@@ -83,13 +83,13 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort)-1)
                 OOO_DATA_calculated(count,1) = delta_time;
                 OOO_DATA_calculated(count,2) = pkt_block;
                 count = count + 1;
-            end
-            if (delta_seq/block_size > 1)
-                fprintf('%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
-                fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
-            else
-                fprintf('%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
-                fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                if (delta_seq/block_size > 1)
+                    fprintf('%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                    fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                else
+                    fprintf('%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                    fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
+                end
             end
         end
     end
@@ -117,43 +117,43 @@ disp('Ploting the figure...')
 % ylabel('Seq# (sequence numbers)');
 
 % figure1 is the CDF_TCP_RX_JITTER
-figure(1);
+% figure(1);
 CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, bins);
 CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time));
-semilogx(bins, CDF_TCP_RX_JITTER,'-g');
-hold on;
-axis square;
-grid on;
-xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
-ylabel('CDF');
-title('CDF of TCP\_RX\_JITTER');
-% figure1 = [xpl_file_name,'_CDF of TCP\_RX\_JITTER.fig'];
+% semilogx(bins, CDF_TCP_RX_JITTER,'-g');
+% hold on;
+% axis square;
+% grid on;
+% xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
+% ylabel('CDF');
+% title('CDF of TCP\_RX\_JITTER');
+% % figure1 = [xpl_file_name,'_CDF of TCP\_RX\_JITTER.fig'];
 
 % figure2 is the histogram
-figure(2);
+% figure(2);
 CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, bins);
 CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time));
-semilogx(bins, CDF_TCP_TX_JITTER,'-b');
-hold on;
-axis square;
-grid on;
-xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
-ylabel('CDF');
-title('CDF of TCP\_TX\_JITTER');
-% figure2 = [xpl_file_name,'_CDF of TCP\_TX\_JITTER.fig'];
+% semilogx(bins, CDF_TCP_TX_JITTER,'-b');
+% hold on;
+% axis square;
+% grid on;
+% xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
+% ylabel('CDF');
+% title('CDF of TCP\_TX\_JITTER');
+% % figure2 = [xpl_file_name,'_CDF of TCP\_TX\_JITTER.fig'];
 
 
 % figure3 is the histogram
-figure(3);
+% figure(3);
 h = hist(OCC(:,1), bins);
 CDF = cumsum(h/length(OCC));
-semilogx(bins, CDF,'-m');
-hold on;
-axis square;
-grid on;
-xlabel('Delay (seconds)');
-ylabel('CDF');
-title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
+% semilogx(bins, CDF,'-m');
+% hold on;
+% axis square;
+% grid on;
+% xlabel('Delay (seconds)');
+% ylabel('CDF');
+% title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
 % figure3 = [xpl_file_name,'_CDF of (TCP\_RX\_time - TCP\_TX\_time).fig'];
 
 % figure4 is the Unusual numbers of packets VS dalay
@@ -178,7 +178,5 @@ pre_output{1,1} = CDF_TCP_RX_JITTER;
 pre_output{1,2} = CDF_TCP_TX_JITTER;
 pre_output{1,3} = CDF;
 pre_output{1,4} = OOO_DATA_calculated;
-
-disp('Program finished')
 
 end

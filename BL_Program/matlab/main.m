@@ -24,6 +24,9 @@ for file_count = 1 : 1 : length(file_list)
     CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + pre_output{2}; 
     CDF_sum = CDF_sum + pre_output{3}; 
     OOO_DATA_calculated_total = [OOO_DATA_calculated_total;pre_output{4}];
+    disp('---------------------------------------------');
+    fprintf('No.%d (%s) has been finished.\n',file_count,xpl_file_name);
+    disp('---------------------------------------------');
 end
 save('/home/mina/Desktop2/yu/dat_calculated.mat','OOO_DATA_calculated_total');
 % Calculate all the average data for CDF
@@ -72,7 +75,7 @@ y = OOO_DATA_calculated_total(:,2);
 plot(x,y,'or');
 hold on;
 axis square;
-axis([0 5 0 2]);
+axis([0 5 0 10]);
 grid on;
 xlabel('Out\_of\_order dalay (seconds)');
 ylabel('Out\_of\_order block numbers (1388bytes per block)');
@@ -81,9 +84,9 @@ saveas(8,'Totl_OOO_block_numbers_VS_OOO_dalay');
 
 % % figure9 is the pkt_block VS dalay bins VS HIST by using hist3
 % figure(9);
-% data = OOO_DATA_calculated_total;
-% delay_bin = 0.001 : 0.005 : 5;
-% block_size_bin = 1 : 1 : 10;
+data = OOO_DATA_calculated_total;
+delay_bin = 0.001 : 0.005 : 5;
+block_size_bin = 1 : 1 : 10;
 % bin3 = {delay_bin, block_size_bin};
 % hist3(data,bin3);
 % % hold on;
@@ -95,5 +98,23 @@ saveas(8,'Totl_OOO_block_numbers_VS_OOO_dalay');
 % set(get(gca,'child'),'FaceColor','interp','CDataMode','auto');
 % title('3D figure for hist per block_size\&delay bins');
 % saveas(9,'3D_figure_for_hist_per_block_size&delay_bins');
+
+% %  figure10 is the pkt_block VS HIST
+figure(10);
+hist(data(:,1),delay_bin);
+axis([-0.5 5 0 inf]);
+xlabel('Delay bins');
+ylabel('Hist');
+saveas(10,'Hist_VS_Delay_bins');
+
+% %  figure11 is the dalay_bins VS HIST
+figure(11);
+hist(data(:,2),block_size_bin);
+axis([0 10 0 inf]);
+xlabel('Block size');
+ylabel('Hist');
+saveas(11,'Hist_VS_Block_size');
+
+disp('Program finished')
 
 % end

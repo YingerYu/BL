@@ -1,0 +1,29 @@
+Now we have some problems with group out of order sequence numbers.
+The problem can be described as follows:
+
+***********************************************************
+  time    seq#
+  ...     ..
+  260     18
+ -------------
+| 300     20  |
+| 320     40  |
+| 360     60  |
+| 410     90  |  <== Recognise as a group delay or not? 
+| 470     140 |
+| 500     150 |
+| 502     190 |
+ -------------
+  280     210
+  ...     ...
+***********************************************************
+
+If recognise as a group, it should be consider as the worst case:
+delta_time = 502 - 260;
+delta_seq# = 190 - 18;
+
+If recognise as independent data, only one line was delay, the others are follow the order to come:
+delta_time = 300 - 260;
+delta_seq# = 20 - 18;
+
+Which one do you prefer for the paper? I would like the worst case for analysis.

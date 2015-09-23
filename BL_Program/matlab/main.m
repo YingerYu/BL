@@ -4,7 +4,7 @@ clear all
 clc
 
 % Read the list file
-fileID = fopen('/home/mina/Desktop2/yu/Data/EBC/1UE---handover/list.txt');
+fileID = fopen('/home/mina/Desktop2/yu/Data/EBC/1UE---static/list.txt');
 file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);
@@ -18,7 +18,7 @@ OOO_DATA_calculated_total = [];
 
 for file_count = 1 : 1 : length(file_list)
     xpl_file_name = file_list{file_count};
-    pre_output = pre7(xpl_file_name, delay_bin);
+    pre_output = OOO_data(xpl_file_name, delay_bin);
     save([file_list{file_count} '_MATLAB'], '-mat','pre_output');
     CDF_TCP_RX_JITTER_sum = CDF_TCP_RX_JITTER_sum + pre_output{1}; 
     CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + pre_output{2}; 
@@ -28,7 +28,7 @@ for file_count = 1 : 1 : length(file_list)
     fprintf('No.%d (%s) has been finished.\n',file_count,xpl_file_name);
     disp('---------------------------------------------');
 end
-save('/home/mina/Desktop2/yu/dat_calculated.mat','OOO_DATA_calculated_total');
+save('/home/mina/Desktop2/yu/BL/BL_Program/matlab/data_calculated.mat','OOO_DATA_calculated_total');
 % Calculate all the average data for CDF
 CDF_TCP_RX_JITTER_average = CDF_TCP_RX_JITTER_sum/length(file_list);
 CDF_TCP_TX_JITTER_average = CDF_TCP_TX_JITTER_sum/length(file_list);

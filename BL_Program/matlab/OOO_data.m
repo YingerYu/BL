@@ -6,7 +6,7 @@
 %%%---------------------------------------------------------------------------------------------%%%
 
 
-function pre_output = OOO_data(xpl_file_name, bins)
+function OOO_output = OOO_data(xpl_file_name, bins)
 % close all
 % clear all
 % clc
@@ -179,9 +179,9 @@ title('OOO block numbers VS OOO dalay');
 disp('...all the figure have been printed')
 
 % output all the matrix into a big cell
-pre_output{1,1} = CDF_TCP_RX_JITTER;
-pre_output{1,2} = CDF_TCP_TX_JITTER;
-pre_output{1,3} = CDF;
-pre_output{1,4} = OOO_DATA_calculated;
+OOO_output{1,1} = CDF_TCP_RX_JITTER;
+OOO_output{1,2} = CDF_TCP_TX_JITTER;
+OOO_output{1,3} = CDF;
+OOO_output{1,4} = OOO_DATA_calculated;
 
 end

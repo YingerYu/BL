@@ -15,7 +15,10 @@ function OOO_output = OOO_data(xpl_file_name, bins)
 block_size = 1388; % define the block size for seq# (LTE)
 % block_size = 1390; % define the block size for seq# (small_cell)
 VariMax = 2; % define 2 types of data, time & sequence number
-TCP_RX_data = zeros(0,VariMax); % save all lines into a matrix
+TCP_RX_data_blank = zeros(0,VariMax); % save all lines into a matrix
+TCP_RX_data_u = zeros(0,VariMax); % save all lines into a matrix with u
+TCP_RX_data_ud = zeros(0,VariMax); % save all lines into a matrix with u or d
+TCP_RX_data = []; % all useful data with matrix
 
 % Read the local file to analysis the data
 fid1 = fopen(xpl_file_name);
@@ -26,34 +29,62 @@ save(output_name);
 fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 
 
 % Set the expr to select useful informations
-expr1 = 'uarrow'; % white arrow's first line begin with "darrow"
-expr2 = '\ '; % space
+expr_u = 'uarrow'; % white arrow's 2nd line begin with "uarrow"
+expr_d = 'darrow'; % white arrow's 1st line begin with "darrow"
+expr_space = '\ '; % space
+% expr4 = 'green'; % green line
+% expr5 = 'line'; % line
 
 disp('Loading the file and matching the useful data...')
 % Set the file line by line
-SeqN = 0;
-last_SeqN = 0;
+SeqN_u = 0;
+last_SeqN_u = 0;
+SeqN_d = 0;
+last_SeqN_d = 0;
 
 tline = fgets(fid1);
 while ischar(tline)
 %     disp(tline)
     if ~isempty(tline) % delete the empty lines
-        data_split = regexp(tline, expr2, 'split');
-        match_value = strcmp(data_split{1},expr1);
-        if (match_value == 1)
-            TCP_RX_data(end+1,1) = str2num(data_split{2});
-            SeqN = str2num(data_split{3}); 
-            if ((SeqN+2^31) < last_SeqN)
-                SeqN = SeqN + (2^32 - 1);
+        data_split = regexp(tline, expr_space, 'split');
+        match_value_u = strcmp(data_split{1},expr_u);
+        match_value_d = strcmp(data_split{1},expr_d);
+        
+        if (match_value_u == 1)
+            TCP_RX_data_ud(end+1,1) = str2num(data_split{2});
+            TCP_RX_data_u(end+1,1) = str2num(data_split{2});
+            SeqN_u = str2num(data_split{3}); 
+            if ((SeqN_u+2^31) < last_SeqN_u)
+                SeqN_u = SeqN_u + (2^32 - 1);
             end
-            last_SeqN = SeqN;
-            TCP_RX_data(end,2) = SeqN;
+            last_SeqN_u = SeqN_u;
+            TCP_RX_data_ud(end,2) = SeqN_u;       
+            TCP_RX_data_u(end,2) = SeqN_u;       
+        elseif (match_value_d == 1)
+            TCP_RX_data_ud(end+1,1) = str2num(data_split{2});
+            SeqN_d = str2num(data_split{3}); 
+            if ((SeqN_d+2^31) < last_SeqN_d)
+                SeqN_d = SeqN_d + (2^32 - 1);
+            end
+            last_SeqN_d = SeqN_d;
+            TCP_RX_data_ud(end,2) = SeqN_d;
         end
     end
     tline = fgets(fid1);
 end
 fclose(fid1);
-% TCP_RX_data = cell2mat(TCP_RX_data); % convert the matched data for plot figure
+
+% Fill all of the blanks
+TCP_RX_data_ud_sort = sortrows(TCP_RX_data_ud,2);
+for udcount = 2 : 1 : (length(TCP_RX_data_ud_sort)-1)
+    if (TCP_RX_data_ud_sort(udcount,1)~=TCP_RX_data_ud_sort((udcount-1),1)&&TCP_RX_data_ud_sort(udcount,1)~=TCP_RX_data_ud_sort((udcount+1),1))
+       if (TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount-1),2)&&TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount+1),2))
+           TCP_RX_data_blank(end+1,1) = TCP_RX_data_ud_sort((udcount-1),1);
+           TCP_RX_data_blank(end,2) = TCP_RX_data_ud_sort(udcount,2);
+       end
+    end
+end
+TCP_RX_data = [TCP_RX_data_blank; TCP_RX_data_u];
 
 disp('...useful data has been matched')
 
@@ -78,7 +109,7 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort)-1)
             fprintf(fid2,'Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort(scount,2),TCP_RX_data_sort(scount,1));
             for ncount = 1 : 1 : scount
                 if (TCP_RX_data_sort((scount+1),1)>TCP_RX_data_sort((scount-ncount),1) )
-                    delta_seq  = TCP_RX_data_sort((scount),2) - TCP_RX_data_sort((scount-ncount),2);
+                    delta_seq  = TCP_RX_data_sort(scount,2) - TCP_RX_data_sort((scount-ncount),2);
                     delta_time = TCP_RX_data_sort(scount,1) - TCP_RX_data_sort((scount-ncount),1);
                     pkt_block  = delta_seq/block_size;
                     if (pkt_block >= 1 && delta_time > 0)

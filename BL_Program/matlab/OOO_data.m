@@ -77,8 +77,8 @@ fclose(fid1);
 % Fill all of the blanks
 TCP_RX_data_ud_sort = sortrows(TCP_RX_data_ud,2);
 for udcount = 2 : 1 : (length(TCP_RX_data_ud_sort)-1)
-    if (TCP_RX_data_ud_sort(udcount,1)~=TCP_RX_data_ud_sort((udcount-1),1)&&TCP_RX_data_ud_sort(udcount,1)~=TCP_RX_data_ud_sort((udcount+1),1))
-       if (TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount-1),2)&&TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount+1),2))
+    if (TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount-1),2)&&TCP_RX_data_ud_sort(udcount,2)~=TCP_RX_data_ud_sort((udcount+1),2))
+       if (TCP_RX_data_ud_sort(udcount,1)~=TCP_RX_data_ud_sort((udcount-1),1)&&TCP_RX_data_ud_sort(udcount,1)==TCP_RX_data_ud_sort((udcount+1),1))
            TCP_RX_data_blank(end+1,1) = TCP_RX_data_ud_sort((udcount-1),1);
            TCP_RX_data_blank(end,2) = TCP_RX_data_ud_sort(udcount,2);
        end

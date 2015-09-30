@@ -4,7 +4,7 @@ clear all
 clc
 
 % Read the list file
-fileID = fopen('/home/mina/Desktop2/yu/Data/Verizon_NJ---/list.txt');
+fileID = fopen('/home/mina/Desktop2/yu/Data/EBC/1UE---static/list.txt');
 file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);
@@ -25,10 +25,10 @@ for file_count = 1 : 1 : length(file_list)
     CDF_sum = CDF_sum + OOO_output{3}; 
     OOO_DATA_calculated_total = [OOO_DATA_calculated_total;OOO_output{4}];
     disp('---------------------------------------------');
-    fprintf('No.%d (%s) has been finished.\n',file_count,xpl_file_name);
+    fprintf('No.%d (%s) has been completed.\n',file_count,xpl_file_name);
     disp('---------------------------------------------');
 end
-save('/home/mina/Desktop2/yu/BL/BL_Program/matlab/data_calculated.mat','OOO_DATA_calculated_total');
+save('/home/mina/Desktop2/yu/BL/BL_Program/matlab/OOO_data_calculated.mat','OOO_DATA_calculated_total');
 % Calculate all the average data for CDF
 CDF_TCP_RX_JITTER_average = CDF_TCP_RX_JITTER_sum/length(file_list);
 CDF_TCP_TX_JITTER_average = CDF_TCP_TX_JITTER_sum/length(file_list);
@@ -75,7 +75,7 @@ y = OOO_DATA_calculated_total(:,2);
 plot(x,y,'or');
 hold on;
 axis square;
-axis([0 5 0 10]);
+% axis([0 5 0 10]);
 grid on;
 xlabel('Out\_of\_order dalay (seconds)');
 ylabel('Out\_of\_order block numbers (1388bytes per block)');
@@ -115,6 +115,11 @@ xlabel('Block size');
 ylabel('Hist');
 saveas(11,'Hist_VS_Block_size');
 
-disp('Program finished')
+disp(' ')
+disp('#########################################################')
+disp(' ')
+disp('OOO_Data_Analysis_Program has been successfully completed')
+disp(' ')
+disp('#########################################################')
 
 % end

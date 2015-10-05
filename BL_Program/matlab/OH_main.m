@@ -1,0 +1,47 @@
+close all
+clear all
+clc
+
+% Read the list file
+fileID = fopen('/home/mina/Desktop2/yu/data/Verizon_NJ---/list.txt');
+file_list_name = textscan(fileID,'%s');
+file_list = file_list_name{1};
+fclose(fileID);
+
+OH_DD_total = [];
+
+for file_count = 1 : 1 : length(file_list)
+    xpl_file_name = file_list{file_count};
+    OH_DD = Overhead_delay(xpl_file_name);
+    save([file_list{file_count} '_MATLAB'], '-mat','OH_DD');
+    OH_DD_total = [OH_DD_total;OH_DD];
+    disp('---------------------------------------------');
+    fprintf('No.%d (%s) has been completed.\n',file_count,xpl_file_name);
+    disp('---------------------------------------------');
+end
+
+
+% figure21 is the 
+figure(21);
+x1 = (:,1);
+y1 = (:,2);
+plot(x1,y1,'-r');
+hold on;
+x2 = ();
+y2 = ();
+plot(x2,y2,'-r');
+hold on;
+axis square;
+grid on;
+xlabel('');
+ylabel('');
+title('');
+saveas(21,'');
+
+disp(' ')
+disp('#########################################################')
+disp(' ')
+disp('Overhead_Deadline_delay_Program has been successfully completed')
+disp(' ')
+disp('#########################################################')
+

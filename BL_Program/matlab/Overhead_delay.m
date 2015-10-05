@@ -1,15 +1,15 @@
 %%%---------------------------------------------------------------------------------------------%%%
 %%% Filename: pre.m                                                                       %%%
-%%% Description: Data Analysis
+%%% Description: Data Analysis for overhead and delay deadline
 %%%
-% Analyze the Tcptrace data and plot the figures.
+% Analyze the overhead and the delay deadline.
 %%%---------------------------------------------------------------------------------------------%%%
 
 
-function OOO_output = OOO_data(xpl_file_name, bins)
-% close all
-% clear all
-% clc
+function OH_DD = Overhead_delay(xpl_file_name)
+close all
+clear all
+clc
 
 % Define and initialize the parameters that used in this function
 block_size = 1388; % define the block size for seq# (LTE)
@@ -21,12 +21,12 @@ TCP_RX_data_ud = zeros(0,VariMax); % save all lines into a matrix with u or d
 TCP_RX_data = []; % all useful data with matrix
 
 % Read the local file to analysis the data
+% fid1 = fopen(xpl_file_name);
 fid1 = fopen(xpl_file_name);
-
 % Create a file to save the data
-output_name = [xpl_file_name,'_OOO_DATA_Output.txt'];
-save(output_name);
-fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 
+% output_name = [xpl_file_name,'_OOO_DATA_Output.txt'];
+% save(output_name);
+% fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 
 
 % Set the expr to select useful informations
 expr_u = 'uarrow'; % white arrow's 2nd line begin with "uarrow"
@@ -94,20 +94,23 @@ TCP_RX_data_sort_s = sortrows(TCP_RX_data,2);% follow the seq# to sort all data 
 TCP_TX_data = cummax(TCP_RX_data_sort_s);
 CDF_of_diff_TCP_RX_time = diff(TCP_RX_data_sort_t(:,1));
 CDF_of_diff_TCP_TX_time = diff(TCP_TX_data(:,1));
-OCC = TCP_TX_data - TCP_RX_data_sort_s;
+% OCC = TCP_TX_data - TCP_RX_data_sort_s;
 % OCC = cummax((TCP_TX_data - cell2mat(TCP_RX_data_sort))/(TCP_TX_data(end,2)-TCP_TX_data(1,2)));
 
-disp('Calculating the number of unusual data and delay')
+disp('Calculating overhead of unusual data and delay')
 disp('**********************************************************************************************')
-fprintf(fid2,'**********************************************************************************************\n');
+% fprintf(fid2,'**********************************************************************************************\n');
 % Calculate the matched data for plot the figure
 OOO_DATA_calculated = zeros(0, VariMax);
+% Overhead_100 = zeros(0, VariMax);
+% Overhead_0   = zeros(0, VariMax);
+Overhead = zeros(0, VariMax);
 count = 1;
 for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
     if (TCP_RX_data_sort_s(scount,2) ~= TCP_RX_data_sort_s((scount+1),2) && TCP_RX_data_sort_s(scount,1) ~= TCP_RX_data_sort_s((scount+1),1))
         if (TCP_RX_data_sort_s(scount,1) > TCP_RX_data_sort_s((scount+1),1))
             fprintf('Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
-            fprintf(fid2,'Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
+%             fprintf(fid2,'Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
             for ncount = 1 : 1 : scount
                 if (TCP_RX_data_sort_s((scount+1),1)>TCP_RX_data_sort_s((scount-ncount),1) )
                     delta_seq  = TCP_RX_data_sort_s(scount,2) - TCP_RX_data_sort_s((scount-ncount),2);
@@ -119,11 +122,21 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
                         count = count + 1;
                         if (delta_seq/block_size > 1)
                             fprintf('%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
-                            fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
+%                             fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
                         else
                             fprintf('%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
-                            fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
+%                             fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
                         end
+                        Last_IO_time      = TCP_RX_data_sort_s((scount-ncount),1);
+                        Last_IO_seq       = TCP_RX_data_sort_s((scount-ncount),2);
+                        Again_IO_index    = find(TCP_RX_data_sort_t(:,1) == TCP_RX_data_sort_s((scount),1));
+                        Again_IO_time     = TCP_RX_data_sort_t((Again_IO_index+1),1);
+                        Again_IO_seq      = TCP_RX_data_sort_t((Again_IO_index+1),2);
+                        IO_ratio          = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                        Overhead(end+1,1) = (TCP_RX_data_sort_s(scount,2) - Last_IO_seq)/IO_ratio; % 100% delay
+                        Overhead(end,2)   = (TCP_RX_data_sort_s(scount,2)-Last_IO_seq)/block_size; % 100% BS
+                        Overhead(end,3)   = TCP_RX_data_sort_s((scount-ncount+1),1) - Last_IO_time; % 0% delay
+                        Overhead(end,4)   = (TCP_RX_data_sort_s((scount-ncount+1),1)-Last_IO_time)*IO_ratio/block_size; % 0% BS       
                     end
                     break
                 end
@@ -131,89 +144,10 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
         end
     end
 end
-fprintf(fid2,'**********************************************************************************************\n');
+% fprintf(fid2,'**********************************************************************************************\n');
 disp('**********************************************************************************************')
-disp('...all unusual data has been founded')
+disp('...Overhead and delay deadline have been analysed, and have been saved in a cell')
 
-disp('Ploting the figure...')
-% % Plot figure5 for the tcptrace
-% figure(5);
-% clf
-% x1rx = TCP_RX_data(:,1);
-% y1rx = TCP_RX_data(:,2);
-% 
-% x1tx = TCP_TX_data(:,1);
-% y1tx = TCP_TX_data(:,2);
-% hold on
-% plot(x1rx - TCP_RX_data(1),y1rx,'.b'); 
-% plot(x1tx - TCP_TX_data(1),y1tx,'r');    % TCP TX
-% hold off
-% axis square;
-% grid on;
-% xlabel('Time (seconds)');
-% ylabel('Seq# (sequence numbers)');
-
-% figure1 is the CDF_TCP_RX_JITTER
-% figure(1);
-CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, bins);
-CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time));
-% semilogx(bins, CDF_TCP_RX_JITTER,'-g');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delta\_T\_of\_TCP\_RX\_DATA (seconds)');
-% ylabel('CDF');
-% title('CDF of TCP\_RX\_JITTER');
-% % figure1 = [xpl_file_name,'_CDF of TCP\_RX\_JITTER.fig'];
-
-% figure2 is the histogram
-% figure(2);
-CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, bins);
-CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time));
-% semilogx(bins, CDF_TCP_TX_JITTER,'-b');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delta\_T\_of\_TCP\_TX\_DATA (seconds)');
-% ylabel('CDF');
-% title('CDF of TCP\_TX\_JITTER');
-% % figure2 = [xpl_file_name,'_CDF of TCP\_TX\_JITTER.fig'];
-
-
-% figure3 is the histogram
-% figure(3);
-h = hist(OCC(:,1), bins);
-CDF = cumsum(h/length(OCC));
-% semilogx(bins, CDF,'-m');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Delay (seconds)');
-% ylabel('CDF');
-% title('CDF of (TCP\_RX\_time - TCP\_TX\_time)');
-% figure3 = [xpl_file_name,'_CDF of (TCP\_RX\_time - TCP\_TX\_time).fig'];
-
-% figure4 is the Unusual numbers of packets VS dalay
-% figure(4);
-% x = OOO_DATA_calculated(:,1);
-% y = OOO_DATA_calculated(:,2);
-% plot(x,y,'or');
-% hold on;
-% axis square;
-% % axis([0 20 0 3]);
-% grid on;
-% xlabel('Out\_of\_order dalay (seconds)');
-% ylabel('Out\_of\_order block numbers (1388bytes per block)');
-% title('OOO block numbers VS OOO dalay');
-% figure4 = [xpl_file_name,'_OOO block numbers VS OOO dalay.fig'];
-
-
-disp('...all the figure have been printed')
-
-% output all the matrix into a big cell
-OOO_output{1,1} = CDF_TCP_RX_JITTER;
-OOO_output{1,2} = CDF_TCP_TX_JITTER;
-OOO_output{1,3} = CDF;
-OOO_output{1,4} = OOO_DATA_calculated;
+OH_DD = Overhead;
 
 end

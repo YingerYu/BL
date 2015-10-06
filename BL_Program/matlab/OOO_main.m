@@ -19,7 +19,7 @@ OOO_DATA_calculated_total = [];
 for file_count = 1 : 1 : length(file_list)
     xpl_file_name = file_list{file_count};
     OOO_output = OOO_data(xpl_file_name, delay_bin);
-    save([file_list{file_count} '_MATLAB'], '-mat','OOO_output');
+    save([file_list{file_count} '_OOO_data'], '-mat','OOO_output');
     CDF_TCP_RX_JITTER_sum = CDF_TCP_RX_JITTER_sum + OOO_output{1}; 
     CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + OOO_output{2}; 
     CDF_sum = CDF_sum + OOO_output{3}; 

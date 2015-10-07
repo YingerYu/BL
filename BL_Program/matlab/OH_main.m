@@ -3,7 +3,7 @@ clear all
 clc
 
 % Read the list file
-fileID = fopen('/home/mina/Desktop2/yu/data/Verizon_NJ---/list.txt');
+fileID = fopen('/home/mina/Desktop2/yu/data/EBC/1UE---handover/list.txt');
 file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);
@@ -24,22 +24,19 @@ end
 save('/home/mina/Desktop2/yu/BL/BL_Program/matlab/OH_DD_total.mat','OH_DD_total');
         
 % delay_bin = 0.001 : 0.005 : 5;
-% figure21 is the 
-% figure(21);
-% x1 = (:,1);
-% y1 = (:,2);
-% plot(x1,y1,'-r');
-% hold on;
-% x2 = ();
-% y2 = ();
-% plot(x2,y2,'-r');
-% hold on;
-% axis square;
-% grid on;
-% xlabel('Deadline Delay (s)');
-% ylabel('PDF');
-% title('xxxxx');
-% % saveas(21,'');
+% figure21 is the scatter figure of reference ratio verous deadline delay
+figure(21);
+scatter(OH_DD_total(:,2),OH_DD_total(:,1),'or');
+hold on;
+scatter(OH_DD_total(:,4),OH_DD_total(:,1),'xb');
+hold on;
+axis square;
+grid on;
+xlabel('Deadline Delay (s)');
+ylabel('Referece ratio (Seq#/Time)');
+legend('Red is 100% miss','Blue is 0% miss');
+title('Scatter figure of reference ratio verous deadline delay');
+saveas(21,'Scatter figure of reference ratio verous deadline delay.fig');
 
 disp(' ')
 disp('#########################################################')

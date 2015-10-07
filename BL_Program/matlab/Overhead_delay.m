@@ -132,56 +132,54 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
                         Last_IO_seq       = TCP_RX_data_sort_s((scount-ncount),2);
                         Again_IO_index    = find(TCP_RX_data_sort_t(:,1) == TCP_RX_data_sort_s((scount),1));
                         if ~isempty(Again_IO_index) 
-                            if (length(Again_IO_index)==1)
-                                Again_IO_time     = TCP_RX_data_sort_t((Again_IO_index+1),1);
-                                Again_IO_seq      = TCP_RX_data_sort_t((Again_IO_index+1),2);
-                                IO_ratio          = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                            Again_IO_index_new = max(Again_IO_index);
+                            Again_IO_time      = TCP_RX_data_sort_t((Again_IO_index_new+1),1);
+                            Again_IO_seq       = TCP_RX_data_sort_t((Again_IO_index_new+1),2);
+                            IO_ratio           = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                        end
+                        % 100% miss is scan from the last_IO_pkts, the
+                        % first reference time larger than real time,
+                        % means the packets already arrived.
+                        again_scount = find(TCP_RX_data_sort_s(:,2)==Again_IO_seq, 1, 'last' );
+                        for ocount = (scount-ncount+1) : 1 : (again_scount-1) % from 1st to last
+                            reference_time_o = (TCP_RX_data_sort_s(ocount,2)-Last_IO_seq)/IO_ratio+Last_IO_time;
+                            real_time_o      = TCP_RX_data_sort_s(ocount,1);
+                            if (reference_time_o >= real_time_o)
+                                Overhead_100(end+1,1) = (TCP_RX_data_sort_s((ocount-2),2) - Last_IO_seq)/IO_ratio; % 100% delay
+                                Overhead_100(end,2)   = (TCP_RX_data_sort_s((ocount-2),2) - Last_IO_seq)/block_size; % 100% BS
+                                All_data_below_ref = 0;                                    
+                                break
                             else
-                                Again_IO_index_new = min(Again_IO_index);
-                                Again_IO_time     = TCP_RX_data_sort_t((Again_IO_index_new+1),1);
-                                Again_IO_seq      = TCP_RX_data_sort_t((Again_IO_index_new+1),2);
-                                IO_ratio          = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
-                            end
-
-                            % 100% miss is scan from the last_IO_pkts, the
-                            % first reference time larger than real time,
-                            % means the packets already arrived.
-                            for ocount = (scount-ncount+1) : 1 : (find(TCP_RX_data_sort_s(:,2)==Again_IO_seq)-1) % from 1st to last
-                                reference_time_o = (TCP_RX_data_sort_s(ocount,2)-Last_IO_seq)/IO_ratio+Last_IO_time;
-                                real_time_o      = TCP_RX_data_sort_s(ocount,1);
-                                if (reference_time_o >= real_time_o)
-                                    Overhead_100(end+1,1) = (TCP_RX_data_sort_s((ocount-1),2) - Last_IO_seq)/IO_ratio; % 100% delay
-                                    Overhead_100(end,2)   = (TCP_RX_data_sort_s((ocount-1),2) - Last_IO_seq)/block_size; % 100% BS
-                                    break
-                                else
-                                    All_data_below_ref = 1;
-                                    Overhead_100(end+1,1) = (TCP_RX_data_sort_s(((find(TCP_RX_data_sort_s(:,2)==Again_IO_seq)-1)-1),2) - Last_IO_seq)/IO_ratio; % 100% delay
-                                    Overhead_100(end,2)   = (TCP_RX_data_sort_s(((find(TCP_RX_data_sort_s(:,2)==Again_IO_seq)-1)-1),2) - Last_IO_seq)/block_size; % 100% BS
-                                    break
-                                end
-                            end
-                            % 0% miss is scan from the Again_last_IO_pkts, the
-                            % first reference time smaller than real time,
-                            % means the packets missed.
-                            for hcount = (find(TCP_RX_data_sort_s(:,2)==Again_IO_seq)-1): (-1) : (scount-ncount+1) % from last to 1st
-                                reference_time_h = (TCP_RX_data_sort_s(ocount,2)-Last_IO_seq)/IO_ratio+Last_IO_time;
-                                real_time_h      = TCP_RX_data_sort_s(hcount,1);
-                                if (All_data_below_ref ~=1)
-                                    if (reference_time_h <= real_time_h)
-                                        Overhead_0(end+1,1)   = (TCP_RX_data_sort_s((hcount+1),2) - Last_IO_seq)/IO_ratio; % 0% delay
-                                        Overhead_0(end,2)     = (TCP_RX_data_sort_s((hcount+1),2) - Last_IO_seq)/block_size; % 0% BS
-                                        Reference_ratio(end+1,1) = IO_ratio;
-                                        break
-                                    end
-                                else
-                                    Overhead_0(end+1,1)   = (Again_IO_time - Last_IO_time); % 0% delay
-                                    Overhead_0(end,2)     = (Again_IO_seq - Last_IO_seq)/block_size; % 0% BS
-                                    Reference_ratio(end+1,1) = IO_ratio;
-                                    break
-                                end    
+                                All_data_below_ref = 1;
+                                Overhead_100(end+1,1) = (TCP_RX_data_sort_s((again_scount-1),2) - Last_IO_seq)/IO_ratio; % 100% delay
+                                Overhead_100(end,2)   = (TCP_RX_data_sort_s((again_scount-1),2) - Last_IO_seq)/block_size; % 100% BS
+                                Overhead_0(end+1,1)   = (Again_IO_time - Last_IO_time); % 0% delay
+                                Overhead_0(end,2)     = (Again_IO_seq - Last_IO_seq)/block_size; % 0% BS
+                                Reference_ratio(end+1,1) = IO_ratio; % Reference ratio
+                                break
                             end
                         end
-                    end
+                        % 0% miss is scan from the Again_last_IO_pkts, the
+                        % first reference time smaller than real time,
+                        % means the packets missed.
+                        for hcount = (again_scount-1): (-1) : (scount-ncount+1) % from last to 1st
+                            reference_time_h = (TCP_RX_data_sort_s(ocount,2)-Last_IO_seq)/IO_ratio+Last_IO_time;
+                            real_time_h      = TCP_RX_data_sort_s(hcount,1);
+                            if (All_data_below_ref ~=1)
+                                if (reference_time_h <= real_time_h)
+                                    Overhead_0(end+1,1)   = (TCP_RX_data_sort_s((hcount+1),2) - Last_IO_seq)/IO_ratio; % 0% delay
+                                    Overhead_0(end,2)     = (TCP_RX_data_sort_s((hcount+1),2) - Last_IO_seq)/block_size; % 0% BS
+                                    Reference_ratio(end+1,1) = IO_ratio;
+                                    break
+                                else
+                                    Overhead_0(end+1,1)   = (TCP_RX_data_sort_s((scount-ncount+1),2) - Last_IO_seq)/IO_ratio; % 0% delay
+                                    Overhead_0(end,2)     = (TCP_RX_data_sort_s((scount-ncount+1),2) - Last_IO_seq)/block_size; % 0% BS
+                                    Reference_ratio(end+1,1) = IO_ratio;
+                                    break                                        
+                                end                                    
+                            end    
+                        end
+                    end                
                     break
                 end
             end

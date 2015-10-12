@@ -1,10 +1,17 @@
+%%---------------------------------------------------------------------------------------------%%
+% Filename: OOO_main.m
+% Main program
+% Description: Data Analysis for OOO pkts verous delay; 
+% Input: the list of each xpl file of each scenario (line 14)
+%%---------------------------------------------------------------------------------------------%%
+
 % function main()
 close all
 clear all
 clc
 
 % Read the list file
-fileID = fopen('/home/mina/Desktop2/yu/data/Verizon_NJ---/list.txt');
+fileID = fopen('/home/mina/Desktop2/xxx/xxx/xxx/list.txt');
 file_list_name = textscan(fileID,'%s');
 file_list = file_list_name{1};
 fclose(fileID);

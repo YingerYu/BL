@@ -1,9 +1,10 @@
-%%%---------------------------------------------------------------------------------------------%%%
-%%% Filename: pre.m                                                                       %%%
-%%% Description: Data Analysis for overhead and delay deadline
-%%%
-% Analyze the overhead and the delay deadline.
-%%%---------------------------------------------------------------------------------------------%%%
+%%---------------------------------------------------------------------------------------------%%
+% Filename: Overhead_delay.m
+% Function program
+% Description: 
+% Data Analysis for overhead verous delay; 
+% Compute the overhead of each out of order packets and for each out of number packets group, how much delay of them
+%%---------------------------------------------------------------------------------------------%%
 
 
 function OH_DD = Overhead_delay(xpl_file_name)
@@ -12,7 +13,7 @@ function OH_DD = Overhead_delay(xpl_file_name)
 % clc
 
 % Define and initialize the parameters that used in this function
-block_size = 1388; % define the block size for seq# (LTE)
+block_size = 1388; % define the block size for seq#
 % block_size = 5; % for test
 VariMax = 2; % define 2 types of data, time & sequence number
 TCP_RX_data_blank = zeros(0,VariMax); % save all lines into a matrix

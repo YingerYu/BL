@@ -1,9 +1,10 @@
-%%%---------------------------------------------------------------------------------------------%%%
-%%% Filename: pre.m                                                                       %%%
-%%% Description: Data Analysis
-%%%
-% Analyze the Tcptrace data and plot the figures.
-%%%---------------------------------------------------------------------------------------------%%%
+%%---------------------------------------------------------------------------------------------%%
+% Filename: OOO_data.m
+% Function program
+% Description: 
+% Data Analysis for OOO pkts verous delay; 
+% Compute the total number of out of order packets groups and for each out of number packets group, how much delay of them
+%%---------------------------------------------------------------------------------------------%%
 
 
 function OOO_output = OOO_data(xpl_file_name, bins)

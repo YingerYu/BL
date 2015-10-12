@@ -1,9 +1,10 @@
-%%%---------------------------------------------------------------------------------------------%%%
-%%% Filename: pre.m                                                                       %%%
-%%% Description: Data Analysis for overhead and delay deadline
-%%%
-% Analyze the overhead and the delay deadline.
-%%%---------------------------------------------------------------------------------------------%%%
+%%---------------------------------------------------------------------------------------------%%
+% Filename: Duration_SumOOO.m
+% Function program
+% Description: 
+% Data Analysis for duration verous OOO pkts; 
+% compute the total number of out of order packets groups and for each xpl file, how much time of the total duration
+%%---------------------------------------------------------------------------------------------%%
 
 
 function Du_Sum = Duration_SumOOO(xpl_file_name)

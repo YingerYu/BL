@@ -8,9 +8,6 @@
 
 
 function OH_DD = Overhead_delay(xpl_file_name)
-% close all
-% clear all
-% clc
 
 % Define and initialize the parameters that used in this function
 block_size = 1388; % define the block size for seq#
@@ -24,10 +21,6 @@ TCP_RX_data = []; % all useful data with matrix
 % Read the local file to analysis the data
 % fid1 = fopen(xpl_file_name);
 fid1 = fopen(xpl_file_name);
-% Create a file to save the data
-% output_name = [xpl_file_name,'_OOO_DATA_Output.txt'];
-% save(output_name);
-% fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 
 
 % Set the expr to select useful informations
 expr_u = 'uarrow'; % white arrow's 2nd line begin with "uarrow"
@@ -100,19 +93,18 @@ CDF_of_diff_TCP_TX_time = diff(TCP_TX_data(:,1));
 
 disp('Calculating overhead of unusual data and delay')
 disp('**********************************************************************************************')
-% fprintf(fid2,'**********************************************************************************************\n');
+
 % Calculate the matched data for plot the figure
 OOO_DATA_calculated = zeros(0, VariMax);
 Overhead_100        = zeros(0, VariMax);
 Overhead_0          = zeros(0, VariMax);
 Reference_ratio     = zeros(0, 1);
-% Overhead = zeros(0, VariMax);
+
 count = 1;
 for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
     if (TCP_RX_data_sort_s(scount,2) ~= TCP_RX_data_sort_s((scount+1),2) && TCP_RX_data_sort_s(scount,1) ~= TCP_RX_data_sort_s((scount+1),1))
         if (TCP_RX_data_sort_s(scount,1) > TCP_RX_data_sort_s((scount+1),1))
             fprintf('Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
-%             fprintf(fid2,'Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
             for ncount = 1 : 1 : scount
                 if (TCP_RX_data_sort_s((scount+1),1)>TCP_RX_data_sort_s((scount-ncount),1) )
                     delta_seq  = TCP_RX_data_sort_s(scount,2) - TCP_RX_data_sort_s((scount-ncount),2);
@@ -124,10 +116,8 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
                         count = count + 1;
                         if (delta_seq/block_size > 1)
                             fprintf('%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
-%                             fprintf(fid2,'%d packets have been delayed for %4fs\n',delta_seq/block_size,delta_time);
                         else
                             fprintf('%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
-%                             fprintf(fid2,'%d packet has been delayed for %4fs\n',delta_seq/block_size,delta_time);
                         end
                         Last_IO_time      = TCP_RX_data_sort_s((scount-ncount),1);
                         Last_IO_seq       = TCP_RX_data_sort_s((scount-ncount),2);
@@ -187,11 +177,11 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
         end
     end
 end
-% fprintf(fid2,'**********************************************************************************************\n');
 disp('**********************************************************************************************')
 disp('...Overhead and delay deadline have been analysed, and have been saved in a cell')
 
 
+% output file for each xpl file
 OH_DD = [Reference_ratio,Overhead_100,Overhead_0];
 
 end

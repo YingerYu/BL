@@ -45,7 +45,7 @@ for dir_count = 1 : 1 : length(dir_list)
         end
     end
     save([dir_name '_Duration_SumOOO'],'-mat','Du_Sum_total');
-    save([dir_name '_REC_OOO_area'],'-mat','REC');
+    save([dir_name '_OOO_area'],'-mat','OOO_area_total');
 
 end
 

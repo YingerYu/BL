@@ -17,7 +17,8 @@ fclose(fileID);
 
 % Store all the data for each scenario
 Du_Sum_total = [];
-REC = [];
+OOO_area_total = [];
+REC = {};
 scenario_index=1;
 xpl_index = 0;
 
@@ -31,10 +32,11 @@ for file_count = 1 : 1 : length(file_list)
     if (xpl_file_name ~= '#')
         xpl_index = xpl_index+1;   
         Du_Sum = Duration_SumOOO(xpl_file_name);
+        REC{scenario_index,xpl_index} = Du_Sum;
+        save([file_list{file_count} '_Duration_Sum'], '-mat','Du_Sum');
         if ~isempty(Du_Sum)
-            Du_Sum_total = [Du_Sum_total;Du_Sum{1}];        
-            REC(scenario_index).DATA{xpl_index} = Du_Sum{2};
-            save([file_list{file_count} '_Duration_Sum'], '-mat','Du_Sum');
+            Du_Sum_total = [Du_Sum_total;Du_Sum{1}];
+            OOO_area_total = [OOO_area_total;Du_Sum{2}];
         end
         disp('---------------------------------------------');
         fprintf('No.%d (%s) has been completed.\n',file_count,xpl_file_name);
@@ -42,6 +44,7 @@ for file_count = 1 : 1 : length(file_list)
     end
 end
 save('/home/mina/Desktop2/yu/BL/matlab/Duration_SumOOO.mat','Du_Sum_total');
+save('/home/mina/Desktop2/yu/BL/matlab/OOO_area.mat','OOO_area_total');
 save('/home/mina/Desktop2/yu/BL/matlab/REC_OOO_area.mat','REC');
 
 

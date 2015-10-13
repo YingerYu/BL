@@ -90,7 +90,7 @@ TCP_TX_data = cummax(TCP_RX_data_sort_s);
 % Compute the total number of out of order packets and the total duration
 % for each xpl file
 count = 0;
-% There are four column in this matrix, 1st is the last io time, 2nd is the last io seq; 3rd is again io time, 4th is again io seq 
+% There are four column in this matrix, 1st is the last io time, 2nd is the last io seq; 3rd is again io time, 4 
 OOO_area = zeros(0,4);
 
 for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
@@ -99,19 +99,21 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
             fprintf('Found the unusual data at sequence# %d at %8fs \n',TCP_RX_data_sort_s(scount,2),TCP_RX_data_sort_s(scount,1));
             for ncount = 1 : 1 : scount
                 if (TCP_RX_data_sort_s((scount+1),1)>TCP_RX_data_sort_s((scount-ncount),1) )
+%                     delta_seq  = TCP_RX_data_sort_s(scount,2) - TCP_RX_data_sort_s((scount-ncount),2);
+%                     delta_time = TCP_RX_data_sort_s(scount,1) - TCP_RX_data_sort_s((scount-ncount),1);
                     count = count + 1;
                     Last_IO_time      = TCP_RX_data_sort_s((scount-ncount),1);
                     Last_IO_seq       = TCP_RX_data_sort_s((scount-ncount),2);
                     Again_IO_index    = find(TCP_RX_data_sort_t(:,1) == TCP_RX_data_sort_s((scount),1));
                     if ~isempty(Again_IO_index) 
-                        Again_IO_index_new = min(Again_IO_index);
+                        Again_IO_index_new = max(Again_IO_index);
                         Again_IO_time      = TCP_RX_data_sort_t((Again_IO_index_new+1),1);
                         Again_IO_seq       = TCP_RX_data_sort_t((Again_IO_index_new+1),2);
                     end
-                    OOO_area(end+1,1) = Last_IO_time;
-                    OOO_area(end,2)   = Last_IO_seq;
-                    OOO_area(end,3)   = Again_IO_time;
-                    OOO_area(end,4)   = Again_IO_seq;
+                    OOO_area(end+1,1) = time_begin;
+                    OOO_area(end,2)   = seq_begin;
+                    
+                    fprintf('(%dth) OOO_Pkts occured at %8fs \n',count,TCP_RX_data_sort_s(scount,1));                    
                     break
                 end
             end
@@ -127,5 +129,5 @@ disp('**************************************************************************
 
 % output file for each xpl file
 Du_Sum{1,1} = [duration,count,(duration/count)];
-Du_Sum{1,2} = OOO_area;
+Du_Sum{1,2} = OOO_begin;
 end

@@ -18,24 +18,28 @@ fclose(fileID);
 
 delay_bin = 0.001 : 0.005 : 5;
 
+% Store all the data for each scenario
 CDF_TCP_RX_JITTER_sum = zeros(size(length(delay_bin)));
 CDF_TCP_TX_JITTER_sum = zeros(size(length(delay_bin)));
 CDF_sum               = zeros(size(length(delay_bin)));
 OOO_DATA_calculated_total = [];
 
+% main loop, call the OOO_data function
 for file_count = 1 : 1 : length(file_list)
     xpl_file_name = file_list{file_count};
-    OOO_output = OOO_data(xpl_file_name, delay_bin);
-    save([file_list{file_count} '_OOO_data'], '-mat','OOO_output');
-    CDF_TCP_RX_JITTER_sum = CDF_TCP_RX_JITTER_sum + OOO_output{1}; 
-    CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + OOO_output{2}; 
-    CDF_sum = CDF_sum + OOO_output{3}; 
-    OOO_DATA_calculated_total = [OOO_DATA_calculated_total;OOO_output{4}];
-    disp('---------------------------------------------');
-    fprintf('No.%d (%s) has been completed.\n',file_count,xpl_file_name);
-    disp('---------------------------------------------');
+    if (xpl_file_name ~= '#')
+        OOO_output = OOO_data(xpl_file_name, delay_bin);
+        save([file_list{file_count} '_OOO_data'], '-mat','OOO_output');
+        CDF_TCP_RX_JITTER_sum = CDF_TCP_RX_JITTER_sum + OOO_output{1}; 
+        CDF_TCP_TX_JITTER_sum = CDF_TCP_TX_JITTER_sum + OOO_output{2}; 
+        CDF_sum = CDF_sum + OOO_output{3}; 
+        OOO_DATA_calculated_total = [OOO_DATA_calculated_total;OOO_output{4}];
+        disp('---------------------------------------------');
+        fprintf('No.%d (%s) has been completed.\n',file_count,xpl_file_name);
+        disp('---------------------------------------------');
+    end
 end
-save('/home/mina/Desktop2/yu/BL/BL_Program/matlab/OOO_data_calculated.mat','OOO_DATA_calculated_total');
+save('/home/mina/Desktop2/yu/BL/matlab/OOO_data_calculated.mat','OOO_DATA_calculated_total');
 % Calculate all the average data for CDF
 CDF_TCP_RX_JITTER_average = CDF_TCP_RX_JITTER_sum/length(file_list);
 CDF_TCP_TX_JITTER_average = CDF_TCP_TX_JITTER_sum/length(file_list);

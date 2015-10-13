@@ -8,13 +8,10 @@
 
 
 function OOO_output = OOO_data(xpl_file_name, bins)
-% close all
-% clear all
-% clc
 
 % Define and initialize the parameters that used in this function
-block_size = 1388; % define the block size for seq# (LTE)
-% block_size = 1390; % define the block size for seq# (small_cell)
+block_size = 1388; % define the block size for seq#
+% block_size = 5; % for test
 VariMax = 2; % define 2 types of data, time & sequence number
 TCP_RX_data_blank = zeros(0,VariMax); % save all lines into a matrix
 TCP_RX_data_u = zeros(0,VariMax); % save all lines into a matrix with u
@@ -24,7 +21,7 @@ TCP_RX_data = []; % all useful data with matrix
 % Read the local file to analysis the data
 fid1 = fopen(xpl_file_name);
 
-% Create a file to save the data
+% Create a file to save the message
 output_name = [xpl_file_name,'_OOO_DATA_Output.txt'];
 save(output_name);
 fid2 = fopen(output_name, 'w', 'n', 'utf-8'); 

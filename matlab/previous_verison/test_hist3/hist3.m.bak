@@ -1,0 +1,78 @@
+function [bins, valsD1, valsD2] = hist3(y,n,m)
+%HIST3  Three dimensional Histogram.
+%   [valsD1, valsD2, bins] = HIST3(Y) bins the elements of Y into 10
+%   bins in the x direction and y direction and returns the number of
+%   elements in each container.
+%
+%   Y is a n x 2 matrix containing x and y coordinates
+%   VALSD1 are the coordinates in the x-direction   
+%   VALSD2 are the coordinates in the y-direction
+%
+%   N = HIST3(Y,N), where M is a scalar, uses M bins in the
+%   two directions.
+%
+%   N = HIST3(Y,N,M), where M and N are scalars, uses N bins in the
+%   x-direction and M bins in the y-direction.
+%   
+
+%   Author: Larsson Omberg <lom@larssono.com>
+%   Date:   2-Dec-2004
+
+
+if nargin == 0
+  error('Requires one or two input arguments.')
+end
+if nargin == 1
+  n = 10;
+  m = 10;
+elseif nargin == 2
+  m = n
+end
+if  isstr(y)
+    error('Input argument must be numeric.')
+end
+
+[sizeM,sizeN] = size(y);
+
+if sizeN > 2
+  error('Input matrix must be of size n x 2')
+end
+
+minD1 = min(y(:,1));
+maxD1 = max(y(:,1));
+minD2 = min(y(:,2));
+maxD2 = max(y(:,2));
+if minD1== maxD1
+  minD1 = minD1 - floor(n/2) - 0.5; 
+  maxD1 = maxD1 + ceil(n/2) - 0.5;
+end
+if minD2== maxD2
+  minD2 = minD2 - floor(m/2) - 0.5; 
+  maxD2 = maxD2 + ceil(m/2) - 0.5;
+end
+binwidthD1 = (maxD1 - minD1) ./ n;
+binwidthD2 = (maxD2 - minD2) ./ m;
+
+y(:,1) = y(:,1)-minD1;
+y(:,2) = y(:,2)-minD2;
+  
+bins = zeros(n,m);
+for i=1:length(y)
+  nPos=floor(y(i,1)/binwidthD1)+1;
+  mPos=floor(y(i,2)/binwidthD2)+1;
+  if nPos == n+1; nPos=n; end
+  if mPos == m+1; mPos=m; end
+  
+  %disp([nPos, mPos, y(i,:)])
+  bins(nPos,mPos) =bins(nPos,mPos)+1;
+end
+
+%Due to difference of referenceing matrices and 3-space
+%I need to flip the vectors for D1 and D2
+valsD2 = (1:n)*binwidthD1 + minD1;
+valsD1 = (1:m)*binwidthD2 + minD2;
+
+if nargout == 0
+  bar3(valsD1, bins,'hist');
+end
+

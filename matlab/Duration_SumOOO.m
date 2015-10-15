@@ -120,12 +120,9 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
 end
 
 duration = TCP_RX_data_sort_t(length(TCP_RX_data_sort_t),1)-TCP_RX_data_sort_t(1,1);
-
-disp('**********************************************************************************************')
-fprintf('In total, ( %d ) OOO_data happend at %f4s duration',count, duration);
-disp('**********************************************************************************************')
+total_seq = TCP_RX_data_sort_s(length(TCP_RX_data_sort_s),2)-TCP_RX_data_sort_s(1,2);
 
 % output file for each xpl file
-Du_Sum{1,1} = [duration,count,(duration/count)];
+Du_Sum{1,1} = [duration,total_seq];
 Du_Sum{1,2} = OOO_area;
 end

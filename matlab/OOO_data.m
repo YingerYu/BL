@@ -7,11 +7,13 @@
 %%---------------------------------------------------------------------------------------------%%
 
 
-function OOO_output = OOO_data(xpl_file_name, bins)
+function OOO_output = OOO_data(xpl_file_name)
 
 % Define and initialize the parameters that used in this function
 block_size = 1388; % define the block size for seq#
 % block_size = 5; % for test
+delay_bin = 0.001 : 0.005 : 5;
+
 VariMax = 2; % define 2 types of data, time & sequence number
 TCP_RX_data_blank = zeros(0,VariMax); % save all lines into a matrix
 TCP_RX_data_u = zeros(0,VariMax); % save all lines into a matrix with u
@@ -90,8 +92,8 @@ disp('Finding the unusual data...')
 TCP_RX_data_sort_t = sortrows(TCP_RX_data,1);% follow the time to sort all data in rows and put them into TCP_RX_data_sort_t cell
 TCP_RX_data_sort_s = sortrows(TCP_RX_data,2);% follow the seq# to sort all data in rows and put them into TCP_RX_data_sort_s cell
 TCP_TX_data = cummax(TCP_RX_data_sort_s);
-CDF_of_diff_TCP_RX_time = diff(TCP_RX_data_sort_t(:,1));
-CDF_of_diff_TCP_TX_time = diff(TCP_TX_data(:,1));
+CDF_of_diff_TCP_TX_time = diff(TCP_RX_data_sort_t(:,1));
+CDF_of_diff_TCP_RX_time = diff(TCP_TX_data(:,1));
 OCC = TCP_TX_data - TCP_RX_data_sort_s;
 % OCC = cummax((TCP_TX_data - cell2mat(TCP_RX_data_sort))/(TCP_TX_data(end,2)-TCP_TX_data(1,2)));
 
@@ -153,9 +155,9 @@ disp('Ploting the figure...')
 
 % figure1 is the CDF_TCP_RX_JITTER
 % figure(1);
-CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, bins);
+CDF_TCP_RX_DIFF_HIST = hist(CDF_of_diff_TCP_RX_time, delay_bin);
 CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time));
-% semilogx(bins, CDF_TCP_RX_JITTER,'-g');
+% semilogx(delay_bin, CDF_TCP_RX_JITTER,'-g');
 % hold on;
 % axis square;
 % grid on;
@@ -166,9 +168,9 @@ CDF_TCP_RX_JITTER = cumsum(CDF_TCP_RX_DIFF_HIST/length(CDF_of_diff_TCP_RX_time))
 
 % figure2 is the histogram
 % figure(2);
-CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, bins);
+CDF_TCP_TX_DIFF_HIST = hist(CDF_of_diff_TCP_TX_time, delay_bin);
 CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time));
-% semilogx(bins, CDF_TCP_TX_JITTER,'-b');
+% semilogx(delay_bin, CDF_TCP_TX_JITTER,'-b');
 % hold on;
 % axis square;
 % grid on;
@@ -180,9 +182,9 @@ CDF_TCP_TX_JITTER = cumsum(CDF_TCP_TX_DIFF_HIST/length(CDF_of_diff_TCP_TX_time))
 
 % figure3 is the histogram
 % figure(3);
-h = hist(OCC(:,1), bins);
+h = hist(OCC(:,1), delay_bin);
 CDF = cumsum(h/length(OCC));
-% semilogx(bins, CDF,'-m');
+% semilogx(delay_bin, CDF,'-m');
 % hold on;
 % axis square;
 % grid on;

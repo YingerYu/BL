@@ -121,12 +121,21 @@ for scount = 1 : 1 : (length(TCP_RX_data_sort_s)-1)
                         end
                         Last_IO_time      = TCP_RX_data_sort_s((scount-ncount),1);
                         Last_IO_seq       = TCP_RX_data_sort_s((scount-ncount),2);
-                        Again_IO_index    = find(TCP_RX_data_sort_t(:,1) == TCP_RX_data_sort_s((scount),1));
-                        if ~isempty(Again_IO_index) 
-                            Again_IO_index_new = min(Again_IO_index);
-                            Again_IO_time      = TCP_RX_data_sort_t((Again_IO_index_new+1),1);
-                            Again_IO_seq       = TCP_RX_data_sort_t((Again_IO_index_new+1),2);
-                            IO_ratio           = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                        Before_Again_IO_index    = find(TCP_RX_data_sort_t(:,1) == TCP_RX_data_sort_s((scount),1));
+                        if ~isempty(Before_Again_IO_index) 
+%                             Again_IO_index = min(Before_Again_IO_index);
+%                             Again_IO_time      = TCP_RX_data_sort_t((Again_IO_index+1),1);
+%                             Again_IO_seq       = TCP_RX_data_sort_t((Again_IO_index+1),2);
+%                             IO_ratio           = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                            for ind_count = 1 : 1 : 100
+                                if (TCP_RX_data_sort_t((Before_Again_IO_index + ind_count),1)>TCP_RX_data_sort_t(Before_Again_IO_index,1))
+                                    Again_IO_index = Before_Again_IO_index + ind_count;
+                                    Again_IO_time      = TCP_RX_data_sort_t(Again_IO_index,1);
+                                    Again_IO_seq       = TCP_RX_data_sort_t(Again_IO_index,2);
+                                    IO_ratio           = (Again_IO_seq-Last_IO_seq)/(Again_IO_time-Last_IO_time);
+                                    break
+                                end
+                            end
                         end
                         % 100% miss is scan from the last_IO_pkts, the
                         % first reference time larger than real time,

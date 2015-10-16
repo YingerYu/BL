@@ -3,7 +3,7 @@ clear all
 clc
 
 % Read the list file
-dirID = fopen('/home/mina/Desktop2/yu/results/list_of_dir_ul.txt');
+dirID = fopen('/home/mina/Desktop2/test/list_of_dir_dl.txt');
 dir_list_name = textscan(dirID,'%s');
 dir_list = dir_list_name{1};
 fclose(dirID);

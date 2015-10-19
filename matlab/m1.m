@@ -3,7 +3,7 @@ clear all
 clc
 
 % Read the list file
-dirID = fopen('/home/mina/Desktop2/yu/results/list_of_dir_dl.txt');
+dirID = fopen('/home/mina/Desktop2/yu/results/list_of_dir_ul.txt');
 dir_list_name = textscan(dirID,'%s');
 dir_list = dir_list_name{1};
 fclose(dirID);
@@ -35,8 +35,7 @@ for dir_count = 1 : 1 : length(dir_list)
             xpl_index = xpl_index+1;   
             Scenario(scenario_index).xpl_name{xpl_index}        = xpl_file_name;
             Scenario(scenario_index).Duration_Length{xpl_index} = Output{1};
-            Scenario(scenario_index).DL_session{xpl_index}      = Output{2};
-%             Scenario(scenario_index).UL_session{xpl_index}    = Output{2};
+            Scenario(scenario_index).UL_session{xpl_index}      = Output{2};
             
             disp('---------------------------------------------');
             fprintf('[ %d/%d ] No.%d (%s) has been completed.\n',file_count, length(file_list), xpl_index, xpl_file_name);

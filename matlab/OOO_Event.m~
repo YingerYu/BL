@@ -199,7 +199,7 @@ duration = TCP_RX_data_sort_t(length(TCP_RX_data_sort_t),1)-TCP_RX_data_sort_t(1
 total_seq = TCP_RX_data_sort_s(length(TCP_RX_data_sort_s),2)-TCP_RX_data_sort_s(1,2);
 duration_length = [duration,total_seq];
 
-Output{1,1} = duration_length;
-Output{1,2} = OOO_EVENT;
+Output{1} = duration_length;
+Output{2} = OOO_EVENT;
 
 end
